@@ -1,4 +1,5 @@
-﻿using Exiled.Events.EventArgs;
+﻿using Exiled.API.Features;
+using Exiled.Events.EventArgs;
 
 namespace FadingLifeforce.Handlers
 {
@@ -14,7 +15,7 @@ namespace FadingLifeforce.Handlers
                 return;
             }
 
-            if (ev.DamageType.isWeapon)
+            if (ev.DamageType.isWeapon && EffectOnShotAllowed(ev.Target))
             {
                 FadingLifeforce.AddEffects(Configs.EffectOnShot, ev.Target);
                 return;
@@ -26,5 +27,7 @@ namespace FadingLifeforce.Handlers
                 return;
             }
         }
+
+        public bool EffectOnShotAllowed(Player player) => !player.IsScp || Configs.EffectOnShotAffectScps;
     }
 }

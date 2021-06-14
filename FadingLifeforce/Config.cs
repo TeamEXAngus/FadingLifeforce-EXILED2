@@ -10,6 +10,9 @@ namespace FadingLifeforce
         [Description("Whether or not the plugin should be enabled on this server.")]
         public bool IsEnabled { get; set; } = true;
 
+        [Description("Whether or not SCPs should be given status effects when they are shot.")]
+        public bool EffectOnShotAffectScps { get; set; } = false;
+
         [Description("A list of effects that could be inflicted when a player is shot, the % chance that it will happen, and the duration of the effect.")]
         public Dictionary<EffectType, float[]> EffectOnShot { get; set; } = new Dictionary<EffectType, float[]>
         {
