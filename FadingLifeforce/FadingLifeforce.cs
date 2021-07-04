@@ -9,8 +9,7 @@ namespace FadingLifeforce
 {
     public class FadingLifeforce : Plugin<Config>
     {
-        private static FadingLifeforce singleton = new FadingLifeforce();
-        public static FadingLifeforce Instance => singleton;
+        public static FadingLifeforce Instance;
         public override PluginPriority Priority { get; } = PluginPriority.Medium;
 
         public override Version RequiredExiledVersion { get; } = new Version(2, 10, 0);
@@ -28,6 +27,7 @@ namespace FadingLifeforce
         //Run startup code when plugin is enabled
         public override void OnEnabled()
         {
+            Instance = this;
             RegisterEvents();
         }
 
