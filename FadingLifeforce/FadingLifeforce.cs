@@ -20,7 +20,7 @@ namespace FadingLifeforce
 
         public Random RNG = new Random();
 
-        private FadingLifeforce()
+        public FadingLifeforce()
         {
         }
 
