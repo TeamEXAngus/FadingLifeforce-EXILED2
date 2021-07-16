@@ -15,7 +15,7 @@ namespace FadingLifeforce
         public override PluginPriority Priority { get; } = PluginPriority.Medium;
 
         public override Version RequiredExiledVersion { get; } = new Version(2, 10, 0);
-        public override Version Version { get; } = new Version(1, 0, 3);
+        public override Version Version { get; } = new Version(1, 0, 4);
 
         private Handlers.Hurting hurting;
         private Handlers.EnteringPD enteringPD;
@@ -63,21 +63,11 @@ namespace FadingLifeforce
             }
         }
 
-        public static bool EffectOnShotAllowed(this Player player, Player Attacker)
+        public static bool EffectOnShotAllowed(this Player Player, Player Attacker)
         {
-            bool SCPCheck = (!player.IsScp) || FadingLifeforce.Instance.Config.EffectOnShotAffectScps;
-            bool TranqGunCheck = (!Attacker.UsingTranqGun()) || FadingLifeforce.Instance.Config.TranqGunInflictsShotEffects;
-            return SCPCheck && TranqGunCheck;
-        }
-
-        private const int TranqGunID = 11;
-
-        public static bool UsingTranqGun(this Player Player)
-        {
-            if (Exiled.CustomItems.API.Features.CustomItem.TryGet(TranqGunID, out var TranqGun))
-                return TranqGun.Check(Player.CurrentItem);
-
-            return false;
+            bool SCPCheck = (!Player.IsScp) || FadingLifeforce.Instance.Config.EffectOnShotAffectScps;
+            bool WeaponCheck = !FadingLifeforce.Instance.Config.IgnoredGuns.Contains(Attacker.CurrentItem.id);
+            return SCPCheck && WeaponCheck;
         }
     }
 }
