@@ -14,7 +14,7 @@ namespace FadingLifeforce
         public bool EffectOnShotAffectScps { get; set; } = false;
 
         [Description("A list of weapons which will not inflict status effects.")]
-        public List<ItemType> IgnoredGuns = new List<ItemType>();
+        public List<ItemType> IgnoredGuns { get; set; } = new List<ItemType>();
 
         [Description("A list of effects that could be inflicted when a player is shot, the % chance that it will happen, and the duration of the effect.")]
         public Dictionary<EffectType, float[]> EffectOnShot { get; set; } = new Dictionary<EffectType, float[]>
