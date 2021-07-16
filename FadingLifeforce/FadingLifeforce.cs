@@ -9,35 +9,30 @@ namespace FadingLifeforce
 {
     public class FadingLifeforce : Plugin<Config>
     {
-        public static FadingLifeforce Instance;
+        private static readonly FadingLifeforce singleton = new FadingLifeforce();
+        public static FadingLifeforce Instance => singleton;
+
         public override PluginPriority Priority { get; } = PluginPriority.Medium;
 
         public override Version RequiredExiledVersion { get; } = new Version(2, 10, 0);
-        public override Version Version { get; } = new Version(1, 0, 1);
+        public override Version Version { get; } = new Version(1, 0, 2);
 
         private Handlers.Hurting hurting;
         private Handlers.EnteringPD enteringPD;
 
-        public Random RNG = new Random();
+        private FadingLifeforce()
+        { }
 
-        public FadingLifeforce()
-        {
-        }
-
-        //Run startup code when plugin is enabled
         public override void OnEnabled()
         {
-            Instance = this;
             RegisterEvents();
         }
 
-        //Run shutdown code when plugin is disabled
         public override void OnDisabled()
         {
             UnregisterEvents();
         }
 
-        //Plugin startup code
         public void RegisterEvents()
         {
             hurting = new Handlers.Hurting();
@@ -47,7 +42,6 @@ namespace FadingLifeforce
             PlayerHandler.EnteringPocketDimension += enteringPD.OnEnteringPD;
         }
 
-        //Plugin shutdown code
         public void UnregisterEvents()
         {
             PlayerHandler.Hurting -= hurting.OnHurting;
@@ -56,16 +50,34 @@ namespace FadingLifeforce
             hurting = null;
             enteringPD = null;
         }
+    }
 
-        public static void AddEffects(Dictionary<EffectType, float[]> dict, Player player)
+    internal static class Extensions
+    {
+        public static void AddEffects(this Player player, Dictionary<EffectType, float[]> dict)
         {
             foreach (var kvp in dict)
             {
-                if (kvp.Value[0] > Instance.RNG.Next(1, 101))
-                {
+                if (kvp.Value[0] > UnityEngine.Random.Range(1, 101))
                     player.EnableEffect(kvp.Key, kvp.Value[1]);
-                }
             }
+        }
+
+        public static bool EffectOnShotAllowed(this Player player, Player Attacker)
+        {
+            bool SCPCheck = (!player.IsScp) || FadingLifeforce.Instance.Config.EffectOnShotAffectScps;
+            bool TranqGunCheck = (!Attacker.UsingTranqGun()) || FadingLifeforce.Instance.Config.TranqGunInflictsShotEffects;
+            return SCPCheck && TranqGunCheck;
+        }
+
+        private const int TranqGunID = 11;
+
+        public static bool UsingTranqGun(this Player Player)
+        {
+            if (Exiled.CustomItems.API.Features.CustomItem.TryGet(TranqGunID, out var TranqGun))
+                return TranqGun.Check(Player.CurrentItem);
+
+            return false;
         }
     }
 }

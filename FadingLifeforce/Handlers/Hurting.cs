@@ -11,23 +11,21 @@ namespace FadingLifeforce.Handlers
         {
             if (ev.DamageType == DamageTypes.Falldown)
             {
-                FadingLifeforce.AddEffects(Configs.EffectOnFall, ev.Target);
+                ev.Target.AddEffects(Configs.EffectOnFall);
                 return;
             }
 
-            if (ev.DamageType.isWeapon && EffectOnShotAllowed(ev.Target))
+            if (ev.DamageType.isWeapon && ev.Target.EffectOnShotAllowed(ev.Attacker))
             {
-                FadingLifeforce.AddEffects(Configs.EffectOnShot, ev.Target);
+                ev.Target.AddEffects(Configs.EffectOnShot);
                 return;
             }
 
             if (ev.DamageType.isScp)
             {
-                FadingLifeforce.AddEffects(Configs.EffectOnHurtByScp, ev.Target);
+                ev.Target.AddEffects(Configs.EffectOnHurtByScp);
                 return;
             }
         }
-
-        public bool EffectOnShotAllowed(Player player) => !player.IsScp || Configs.EffectOnShotAffectScps;
     }
 }

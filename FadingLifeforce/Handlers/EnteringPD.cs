@@ -6,7 +6,7 @@ namespace FadingLifeforce.Handlers
     {
         public void OnEnteringPD(EnteringPocketDimensionEventArgs ev)
         {
-            FadingLifeforce.AddEffects(FadingLifeforce.Instance.Config.EffectOnPdEnter, ev.Player);
+            ev.Player.AddEffects(FadingLifeforce.Instance.Config.EffectOnPdEnter);
         }
     }
 }
