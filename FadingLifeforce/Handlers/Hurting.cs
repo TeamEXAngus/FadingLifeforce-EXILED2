@@ -15,6 +15,9 @@ namespace FadingLifeforce.Handlers
                 return;
             }
 
+            if (ev.Attacker == ev.Target)
+                return;
+
             if (ev.DamageType.isWeapon && ev.Target.EffectOnShotAllowed(ev.Attacker))
             {
                 ev.Target.AddEffects(Configs.EffectOnShot);
